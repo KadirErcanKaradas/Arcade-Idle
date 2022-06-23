@@ -10,13 +10,12 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] private Rigidbody rb;
     [SerializeField] private GameObject moneyParent;
     [SerializeField] private GameObject bankParent;
-    [SerializeField] private List<GameObject> money = new List<GameObject>(); 
+    [SerializeField] public List<GameObject> money = new List<GameObject>(); 
+    private int moneyPrize=0;
     private FloatingJoystick joystick;
     private Animator anim;
     private bool isStack = false;
     private Coroutine coroutine;
-
-
 
     private void Awake()
     {
@@ -41,6 +40,8 @@ public class PlayerManager : MonoBehaviour
     {
         bankA.money.Remove(item);
         money.Add(item);
+        moneyPrize += 10;
+        GameManager.instance.ChangeMoneyText(moneyPrize);
         item.transform.parent = moneyParent.transform;
         Vector3 direction = new Vector3(0,money.Count* 0.015f, 0);
         item.transform.DOLocalMove(direction,0.25f);
@@ -52,7 +53,7 @@ public class PlayerManager : MonoBehaviour
         bankB.money.Add(item);
         item.transform.parent = bankParent.transform;
         Vector3 direction = new Vector3(0,0, bankB.money.Count*1);
-        item.transform.DOLocalMove(bankB.moneyPivot.transform.position, 0.25f);
+        item.transform.DOLocalMove(bankB.moneyPivot.transform.position*2, 0.25f);
         item.transform.DOLocalRotate(Vector3.zero, 0.25f);
     }
     public void ChangeAnimation(bool isStack)
@@ -63,7 +64,6 @@ public class PlayerManager : MonoBehaviour
     public void MoneyDrop(BankB bankB)
     {
         coroutine = StartCoroutine(MoneyDropDelay(bankB));
-
     }
     public void StopDrop()
     {
@@ -73,17 +73,15 @@ public class PlayerManager : MonoBehaviour
     IEnumerator MoneyDropDelay(BankB bankB)
     {
         print("start");
-        while (money.Count > 0)
+        while (money.Count > 0 && !bankB.isMachineActive)
         {
+ 
             print("money");
-            GameObject item = money[money.Count - 1];
-            bankB.money.Add(item);
+            GameObject item = money[money.Count - 1]; 
             money.Remove(item);
-            item.transform.parent = bankB.moneyPivot.transform;
-            Vector3 direction = new Vector3(0, 0, bankB.money.Count * 1);
-            item.transform.DOLocalMove(Vector3.zero, 0.25f);
-            item.transform.DOLocalRotate(Vector3.zero, 0.25f);
-
+            moneyPrize -= 10;
+            bankB.FillArea(item);
+            GameManager.instance.ChangeMoneyText(moneyPrize);
             yield return new WaitForSeconds(0.25f);
         }
             anim.SetLayerWeight(1, 0f);

@@ -6,6 +6,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
     [SerializeField] private PlayerManager playerManager;
+    [SerializeField] private UIController uiController;
     private void Awake()
     {
         if (instance == null)
@@ -29,5 +30,10 @@ public class GameManager : MonoBehaviour
     public void StopDrop()
     {
         playerManager.StopDrop();
+    }
+    public void ChangeMoneyText(int moneyValue)
+    {
+        uiController.ChangeMoneyText(moneyValue);
+
     }
 }
