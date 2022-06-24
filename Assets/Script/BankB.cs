@@ -12,9 +12,10 @@ public class BankB : MonoBehaviour
     [SerializeField] private TMP_Text moneyText;
     [SerializeField] private GameObject cube;
     [SerializeField] private GameObject takeMoney;
+    [SerializeField] private int areaPrize = 200;
     [SerializeField] private GameObject moneyAreaGround;
     public bool isMachineActive = false;
-    private int areaPrize = 200;
+    
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
@@ -43,9 +44,10 @@ public class BankB : MonoBehaviour
             item.transform.DOLocalMove(Vector3.zero, 0.25f);
             item.transform.DOLocalRotate(Vector3.zero, 0.25f);
 
-            if (moneyArea == 200)
+            if (moneyArea == areaPrize)
             {
                 isMachineActive = true;
+                gameObject.GetComponent<MeshRenderer>().enabled = false;
                 cube.SetActive(true);
                 takeMoney.SetActive(false);
                 moneyAreaGround.SetActive(true);
