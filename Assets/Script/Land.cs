@@ -4,7 +4,7 @@ using UnityEngine;
 using TMPro;
 using DG.Tweening;
 
-public class BankB : MonoBehaviour
+public class Land : MonoBehaviour
 {
     [SerializeField] public List<GameObject> money = new List<GameObject>();
     [SerializeField] private bool isCollect = false;
@@ -15,13 +15,13 @@ public class BankB : MonoBehaviour
     [SerializeField] private int areaPrize = 200;
     [SerializeField] private GameObject moneyAreaGround;
     public bool isMachineActive = false;
-    
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
             isCollect = true;
-            //GameManager.instance.Drop(this);
+            GameManager.instance.Drop(this);
         }
     }
     private void OnTriggerExit(Collider other)
@@ -36,9 +36,9 @@ public class BankB : MonoBehaviour
     {
         if (!isMachineActive)
         {
+            money.Add(item);
             int moneyArea = money.Count * 10;
             moneyText.text = moneyArea + "/" + areaPrize;
-            money.Add(item);
             item.transform.parent = moneyPivot.transform;
             Vector3 direction = new Vector3(0, 0, money.Count * 1);
             item.transform.DOLocalMove(Vector3.zero, 0.25f);
@@ -54,6 +54,6 @@ public class BankB : MonoBehaviour
 
             }
         }
-       
+
     }
 }

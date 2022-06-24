@@ -47,13 +47,13 @@ public class PlayerManager : MonoBehaviour
         item.transform.DOLocalMove(direction,0.25f);
         item.transform.DOLocalRotate(Vector3.zero, 0.25f);
     }
-    public void RemoveMoney(GameObject item, BankB bankB)
+    public void RemoveMoney(GameObject item, Land land)
     {
         money.Remove(item);
-        bankB.money.Add(item);
+        land.money.Add(item);
         item.transform.parent = bankParent.transform;
-        Vector3 direction = new Vector3(0,0, bankB.money.Count*1);
-        item.transform.DOLocalMove(bankB.moneyPivot.transform.position*2, 0.25f);
+        Vector3 direction = new Vector3(0,0, land.money.Count*1);
+        item.transform.DOLocalMove(land.moneyPivot.transform.position*2, 0.25f);
         item.transform.DOLocalRotate(Vector3.zero, 0.25f);
     }
     public void ChangeAnimation(bool isStack)
@@ -61,26 +61,26 @@ public class PlayerManager : MonoBehaviour
             anim.SetLayerWeight(1, 0.9f); 
     }
 
-    public void MoneyDrop(BankB bankB)
+    public void MoneyDrop(Land land)
     {
-        coroutine = StartCoroutine(MoneyDropDelay(bankB));
+        coroutine = StartCoroutine(MoneyDropDelay(land));
     }
     public void StopDrop()
     {
        if(coroutine != null) StopCoroutine(coroutine);
     }
 
-    IEnumerator MoneyDropDelay(BankB bankB)
+    IEnumerator MoneyDropDelay(Land land)
     {
         print("start");
-        while (money.Count > 0 && !bankB.isMachineActive)
+        while (money.Count > 0 && !land.isMachineActive)
         {
  
             print("money");
             GameObject item = money[money.Count - 1]; 
             money.Remove(item);
             moneyPrize -= 10;
-            bankB.FillArea(item);
+            land.FillArea(item);
             GameManager.instance.ChangeMoneyText(moneyPrize);
             yield return new WaitForSeconds(0.25f);
         }

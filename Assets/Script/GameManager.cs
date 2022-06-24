@@ -23,9 +23,9 @@ public class GameManager : MonoBehaviour
         playerManager.AddMoney(item,bankA);
         playerManager.ChangeAnimation(true);
     } 
-    public void Drop(BankB bankB)
+    public void Drop(Land land)
     {
-        playerManager.MoneyDrop(bankB);
+        playerManager.MoneyDrop(land);
     }
     public void StopDrop()
     {
